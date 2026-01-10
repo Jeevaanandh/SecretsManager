@@ -6,7 +6,7 @@
 
 
 //Run this only once to get the initial Hash for the master password
-int getHash(char password[100], char encoded_hash[128], unsigned char raw_hash[32]){
+int getHash_encoded(char password[100], char encoded_hash[128]){
     unsigned char salt[16];
     RAND_bytes(salt,sizeof(salt));
 
@@ -21,20 +21,13 @@ int getHash(char password[100], char encoded_hash[128], unsigned char raw_hash[3
         password, strlen(password),
         salt, sizeof(salt),
         32,
-        encoded_hash, sizeof(encoded_hash)
+        encoded_hash, sizeof(encoded_hash)  //This encoded has stores the salt in it to so, dont store the salt in the DB.
     );
 
-    //This is to get the RAW hash that is to be used for the AES Key.
-    int res2= argon2id_hash_raw(
-        10,
-        1<<18,
-        1,
-        password, strlen(password),
-        salt, sizeof(salt),
-        raw_hash, sizeof(raw_hash)
-    );
+    
+    
 
-    if(res1!= ARGON2_OK && res2!= ARGON2_OK){
+    if(res1!= ARGON2_OK){
         return 1;
     }
 
@@ -42,3 +35,5 @@ int getHash(char password[100], char encoded_hash[128], unsigned char raw_hash[3
         return 0;
     }
 }
+
+
