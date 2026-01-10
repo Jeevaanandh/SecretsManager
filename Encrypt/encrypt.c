@@ -3,17 +3,18 @@
 #include<openssl/evp.h>
 #include<openssl/rand.h>
 
-int encrypt(unsigned char key[32], unsigned char iv[16], unsigned char password[128]){
+int encrypt(unsigned char *key, unsigned char *iv, unsigned char *password,unsigned char *cipher, int *cipher_len, int *iv_len){
     
     RAND_bytes(iv,sizeof(iv));
+    *iv_len= 16;
 
     EVP_CIPHER_CTX *ctx;
     ctx= EVP_CIPHER_CTX_new();
 
     EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, key, iv);
 
-    unsigned char cipher[128];
-    int len, cipher_len;
+    
+    int len;
 
     EVP_EncryptUpdate(
         ctx,
@@ -23,11 +24,13 @@ int encrypt(unsigned char key[32], unsigned char iv[16], unsigned char password[
         strlen((char*)password)
     );
 
-    cipher_len= len;
+    *cipher_len= len;
 
     EVP_EncryptFinal_ex(ctx, cipher+len, &len);
-    cipher_len+=len;
+    *cipher_len+=len;
 
-    EVP_CIPHER_free(ctx);
+    EVP_CIPHER_CTX_free(ctx);
+
+    return 0;
 
 }

@@ -5,7 +5,7 @@
 #include<stdlib.h>
 
 
-
+//Run this only once to get the initial Hash for the master password
 int getHash(char password[100], char encoded_hash[128], unsigned char raw_hash[32]){
     unsigned char salt[16];
     RAND_bytes(salt,sizeof(salt));

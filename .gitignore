@@ -1,1 +1,5 @@
 .vscode
+db.o
+Encrypt/encrypt.o
+Encrypt/main.o
+check_exe
