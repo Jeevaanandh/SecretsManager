@@ -14,12 +14,30 @@ TARGET = check_exe
 OBJS2 = CreateHash/main.o CreateHash/createHash.o db.o
 TARGET2= create_exe
 
-all: $(TARGET) $(TARGET2)
+
+OBJS3 = ValidateHash/main.o ValidateHash/validateHash.o db.o 
+TARGET3 = validate_exe
+
+all: $(TARGET) $(TARGET2) $(TARGET3)
 $(TARGET): $(OBJS)
 	$(CC) $(OBJS) $(LDFLAGS) $(LIBS) -o $(TARGET)
 
 $(TARGET2): $(OBJS2)
 	$(CC) $(OBJS2) $(LDFLAGS) $(LIBS) -o $(TARGET2)
+
+
+$(TARGET3): $(OBJS3)
+	$(CC) $(OBJS3) $(LDFLAGS) $(LIBS) -o $(TARGET3)
+
+
+
+
+ValidateHash/main.o: ValidateHash/main.c ValidateHash/validateHash.h db.h
+	$(CC) $(CFLAGS) -c ValidateHash/main.c -o ValidateHash/main.o
+
+
+ValidateHash/validateHash.o: ValidateHash/validateHash.c ValidateHash/validateHash.h 
+	$(CC) $(CFLAGS) -c ValidateHash/validateHash.c -o ValidateHash/validateHash.o
 
 
 

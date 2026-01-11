@@ -6,5 +6,10 @@ Encrypt/main.o
 CreateHash/createHash.o
 CreateHash/main.o
 
+ValidateHash/validateHash.o
+ValidateHash/main.o
+
+
 check_exe
 create_exe
+validate_exe

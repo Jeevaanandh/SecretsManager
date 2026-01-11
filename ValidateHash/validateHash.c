@@ -6,8 +6,8 @@
 
 
 //This function verifies the password witht the stored encoded hash.
-int verifyPassword(char password[100], unsigned char encoded_hash[128]){
-    int res= argon2_verify(encoded_hash, password, strlen(password), NULL);
+int verifyPassword(char *password, char *encoded_hash){
+    int res= argon2_verify(encoded_hash, password, strlen(password), Argon2_id);
 
     if(res!= ARGON2_OK){
         return 1;

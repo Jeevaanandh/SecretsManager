@@ -110,3 +110,28 @@ int storeHash(char *encoded_hash){
     return 0;
 
 }
+
+
+int get_hash_fromDB(char *encoded_hash, size_t hashlen){
+    sql= "SELECT hash FROM MasterHash;";
+
+    sqlite3_stmt *stmt;
+
+    sqlite3_prepare_v2(DB, sql, -1, &stmt, NULL);
+    
+    if(sqlite3_step(stmt)== SQLITE_ROW){
+        const char *db_text= (char *) sqlite3_column_text(stmt,0);
+
+        strncpy(encoded_hash, db_text, hashlen-1);
+        encoded_hash[hashlen-1]= '\0';
+
+        sqlite3_finalize(stmt);
+
+        return 0;
+    }
+
+    return -1;
+
+
+
+}
