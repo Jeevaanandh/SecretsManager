@@ -1,6 +1,7 @@
 //Use Sqlite to Add to the DB.
-//You have to add: Master Password Hash
-//                 Encrypted password and IV (DONE)
+//You have to add function to: Store Master Password Hash
+//                             Store Encrypted password and IV (DONE)
+//                             Retrieve the encoded hash of the mater password [This is for validateHash]
 
 #include<stdio.h>
 #include<string.h>
@@ -78,8 +79,34 @@ int store_password(char *tag,unsigned char *cipher, unsigned char *iv, int ciphe
 
     return 0;
 
-    
+}
 
-    
+
+int storeHash(char *encoded_hash){
+    sql= "CREATE TABLE IF NOT EXISTS MasterHash (hash TEXT);";
+
+    sqlite3_stmt *stmt;
+
+    sqlite3_prepare_v2(DB, sql, -1, &stmt, NULL);
+    rc= sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+
+    if(rc!= SQLITE_DONE){
+        return 1;
+    }
+
+    sql= "INSERT INTO MasterHash (hash) VALUES (?);";
+    sqlite3_prepare_v2(DB, sql, -1, &stmt, NULL);
+
+    sqlite3_bind_text(stmt, 1, encoded_hash, -1, SQLITE_TRANSIENT);
+
+    rc= sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+
+    if(rc!= SQLITE_DONE){
+        return 1;
+    }
+
+    return 0;
 
 }

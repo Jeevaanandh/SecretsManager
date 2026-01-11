@@ -6,7 +6,7 @@
 
 
 //Run this only once to get the initial Hash for the master password
-int getHash_encoded(char password[100], char encoded_hash[128]){
+int getHash_encoded(char *password, char *encoded_hash, size_t hashlen){
     unsigned char salt[16];
     RAND_bytes(salt,sizeof(salt));
 
@@ -16,12 +16,12 @@ int getHash_encoded(char password[100], char encoded_hash[128]){
     //USe verify to check user input password with the hash stored in the DB
     int res1= argon2id_hash_encoded(
         10,
-        1<<18,
+        1<<16,
         1,
         password, strlen(password),
         salt, sizeof(salt),
         32,
-        encoded_hash, sizeof(encoded_hash)  //This encoded has stores the salt in it to so, dont store the salt in the DB.
+        encoded_hash, hashlen  //This encoded has stores the salt in it to so, dont store the salt in the DB.
     );
 
     

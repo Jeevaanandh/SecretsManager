@@ -2,4 +2,9 @@
 db.o
 Encrypt/encrypt.o
 Encrypt/main.o
+
+CreateHash/createHash.o
+CreateHash/main.o
+
 check_exe
+create_exe
