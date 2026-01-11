@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[]){
 
-    //This is the master Password.
+    //This is to store the master Password in 32Bytes.
     unsigned char key[32];
     memset(key, 0, 32);  
 
