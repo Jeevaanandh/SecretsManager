@@ -1,7 +1,7 @@
 //Use Sqlite to Add to the DB.
 //You have to add function to: Store Master Password Hash
 //                             Store Encrypted password and IV (DONE)
-//                             Retrieve the encoded hash of the mater password [This is for validateHash]
+//                             Retrieve the encoded hash of the mater password [This is for validateHash] (DONE)
 
 #include<stdio.h>
 #include<string.h>
@@ -132,6 +132,56 @@ int get_hash_fromDB(char *encoded_hash, size_t hashlen){
 
     return -1;
 
+}
+
+
+int get_cipher_fromDB(char * tag, char *storeTag, unsigned char *cipher, unsigned char *iv, size_t t_len, int *cipher_size, int *iv_size){
+    sql= "SELECT tag, cipher, iv FROM passwords WHERE tag= ?;";
+
+    
+    sqlite3_stmt *stmt;
+
+    sqlite3_prepare_v2(DB, sql, -1, &stmt, NULL);
+
+    sqlite3_bind_text(stmt, 1, tag, -1, SQLITE_TRANSIENT);
+
+    const char *t;
+    const unsigned char *cblob;
+    const unsigned char *iv_blob;
+
+    if(sqlite3_step(stmt)==SQLITE_ROW){
+        t= (const char *) sqlite3_column_text(stmt,0);
+        cblob= (const unsigned char *) sqlite3_column_blob(stmt,1);
+        int csize= sqlite3_column_bytes(stmt,1);
+
+        iv_blob= (const unsigned char *) sqlite3_column_blob(stmt,2);
+        int isize= sqlite3_column_bytes(stmt,2);
+
+        strncpy(storeTag, t, t_len-1);
+        storeTag[t_len-1]= '\0';
+
+        memcpy(cipher, cblob, csize);
+        memcpy(iv, iv_blob, isize);
+
+        *cipher_size= csize;
+        *iv_size= isize;
+
+        sqlite3_finalize(stmt);
+
+        return 0;
+
+
+
+        
+
+    }
+
+    else{
+        sqlite3_finalize(stmt);
+        return 1;
+    }
+
+    
 
 
 }

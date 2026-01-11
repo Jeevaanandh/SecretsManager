@@ -4,16 +4,28 @@
 #include "../db.h"
 
 int main(int argc, char *argv[]){
+
+    //This is the master Password.
     unsigned char key[32];
     memset(key, 0, 32);  
 
     unsigned char iv[16];
+
+    //This is the password to store
     unsigned char password[128]; //This is given by the user, soooo assign this to one of the argv ‼️ (DONE)
     char tag[100];
 
     strncpy((char*)password, argv[1], sizeof(password)-1);
     strncpy((char*)tag, argv[2], sizeof(tag)-1);
     password[sizeof(password)-1] = '\0';
+
+    //This is the master password
+    char password2[128];
+    strncpy(password2, argv[3], sizeof(password2) - 1);
+    password2[sizeof(password2) - 1] = '\0';
+
+
+    memcpy(key, password2, strlen(password2) > 32 ? 32 : strlen(password2));
 
     unsigned char cipher[128];
     int cipher_len;
