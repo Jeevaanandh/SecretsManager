@@ -50,8 +50,8 @@ int db_init(){
 
 
 
-int store_password(char *tag,unsigned char *cipher, unsigned char *iv, int cipher_len, int iv_len){
-    sql= "CREATE TABLE IF NOT EXISTS passwords(tag TEXT, cipher BLOB, iv BLOB);";
+int store_password(char *tag,unsigned char *cipher, unsigned char *iv, unsigned char *salt, int cipher_len, int iv_len, int salt_len){
+    sql= "CREATE TABLE IF NOT EXISTS passwords2(tag TEXT, cipher BLOB, iv BLOB, salt BLOB);";
 
     sqlite3_stmt *stmt;
 
@@ -63,12 +63,13 @@ int store_password(char *tag,unsigned char *cipher, unsigned char *iv, int ciphe
         return 1;
     }
 
-    sql= "INSERT OR REPLACE INTO passwords (tag,cipher,iv) VALUES (?,?,?);";
+    sql= "INSERT OR REPLACE INTO passwords2 (tag,cipher,iv,salt) VALUES (?,?,?,?);";
     sqlite3_prepare_v2(DB, sql, -1, &stmt, NULL);
 
     sqlite3_bind_text(stmt, 1, tag, -1, SQLITE_TRANSIENT);
-    sqlite3_bind_blob(stmt, 2, cipher, cipher_len, SQLITE_STATIC);
-    sqlite3_bind_blob(stmt, 3, iv, iv_len, SQLITE_STATIC);
+    sqlite3_bind_blob(stmt, 2, cipher, cipher_len, SQLITE_TRANSIENT);
+    sqlite3_bind_blob(stmt, 3, iv, iv_len, SQLITE_TRANSIENT);
+    sqlite3_bind_blob(stmt, 4, salt, salt_len, SQLITE_TRANSIENT);
 
     rc= sqlite3_step(stmt);
     sqlite3_finalize(stmt);
@@ -135,8 +136,8 @@ int get_hash_fromDB(char *encoded_hash, size_t hashlen){
 }
 
 
-int get_cipher_fromDB(char * tag, char *storeTag, unsigned char *cipher, unsigned char *iv, size_t t_len, int *cipher_size, int *iv_size){
-    sql= "SELECT tag, cipher, iv FROM passwords WHERE tag= ?;";
+int get_cipher_fromDB(char * tag, char *storeTag, unsigned char *cipher, unsigned char *iv, unsigned char *salt, size_t t_len, int *cipher_size, int *iv_size, int *salt_size){
+    sql= "SELECT tag, cipher, iv, salt FROM passwords2 WHERE tag= ?;";
 
     
     sqlite3_stmt *stmt;
@@ -148,6 +149,7 @@ int get_cipher_fromDB(char * tag, char *storeTag, unsigned char *cipher, unsigne
     const char *t;
     const unsigned char *cblob;
     const unsigned char *iv_blob;
+    const unsigned char *salt_blob;
 
     if(sqlite3_step(stmt)==SQLITE_ROW){
         t= (const char *) sqlite3_column_text(stmt,0);
@@ -157,14 +159,19 @@ int get_cipher_fromDB(char * tag, char *storeTag, unsigned char *cipher, unsigne
         iv_blob= (const unsigned char *) sqlite3_column_blob(stmt,2);
         int isize= sqlite3_column_bytes(stmt,2);
 
+        salt_blob= (const unsigned char *) sqlite3_column_blob(stmt,3);
+        int ssize= sqlite3_column_bytes(stmt,3);
+
         strncpy(storeTag, t, t_len-1);
         storeTag[t_len-1]= '\0';
 
         memcpy(cipher, cblob, csize);
         memcpy(iv, iv_blob, isize);
+        memcpy(salt, salt_blob, ssize);
 
         *cipher_size= csize;
         *iv_size= isize;
+        *salt_size= ssize;
 
         sqlite3_finalize(stmt);
 

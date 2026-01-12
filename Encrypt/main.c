@@ -2,6 +2,7 @@
 #include<string.h>
 #include "encrypt.h"
 #include "../db.h"
+#include "../CreateHash/createHash.h"
 
 int main(int argc, char *argv[]){
 
@@ -24,17 +25,35 @@ int main(int argc, char *argv[]){
     strncpy(password2, argv[3], sizeof(password2) - 1);
     password2[sizeof(password2) - 1] = '\0';
 
+    unsigned char salt[16];
 
-    memcpy(key, password2, strlen(password2) > 32 ? 32 : strlen(password2));
+    //Converting the masterPassword to a raw hash to use as key for encryption
+    int rc= get_HashRaw(password2, key, salt, strlen(password2), sizeof(key), sizeof(salt));
+
+    if(rc!=0){
+        printf("Error getting raw Hash\n");
+    }
+
+    
 
     unsigned char cipher[128];
     int cipher_len;
     int iv_len;
+    int salt_len= 16;
     db_init();
     int res= encrypt(key, iv, password, cipher, &cipher_len, &iv_len);  //USE BRAINN!!! Passing the len variables by reference!!!
 
+    if(res!=0){
+        printf("Error encrypting\n");
+    }
+
+
     
     //This function is from db.c. This is to store the key and the iv in the DB
-    store_password(tag,cipher, iv, cipher_len, iv_len);  
+    rc= store_password(tag,cipher, iv,salt, cipher_len, iv_len, salt_len);  
+
+    if(rc!=0){
+        printf("Error storing password\n");
+    }
 
 }

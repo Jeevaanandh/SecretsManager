@@ -2,6 +2,7 @@
 #include "decrypt.h"
 #include "../db.h"
 #include "../ValidateHash/validateHash.h"
+#include "../CreateHash/createHash.h"
 #include<string.h>
 
 int main(int argc, char *argv[]){
@@ -14,10 +15,10 @@ int main(int argc, char *argv[]){
     strncpy(password, argv[2], sizeof(password) - 1);
     password[sizeof(password) - 1] = '\0';
 
-    /* Use password as AES key (padded / truncated to 32 bytes) */
+    /* Use password as AES key */
     unsigned char key[32];
-    memset(key, 0, 32);
-    memcpy(key, password, strlen(password) > 32 ? 32 : strlen(password));
+    memset(key, 0, sizeof(key)); 
+    
 
     
 
@@ -31,16 +32,26 @@ int main(int argc, char *argv[]){
     int cipher_len;
     unsigned char iv[16];
     int iv_len;
+    unsigned char salt[16];
+    int salt_len;
 
     unsigned char plainText[256];
     int plain_len;
 
     char finalTag[100];
-    int rc= get_cipher_fromDB(tag, finalTag, cipher, iv, sizeof(tag), &cipher_len, &iv_len);
+    int rc= get_cipher_fromDB(tag, finalTag, cipher, iv,salt, sizeof(tag), &cipher_len, &iv_len, &salt_len);
 
     if(rc==1){
         printf("Error\n");
         return 1;
+    }
+
+    rc= get_HashRaw_customSalt(password, key, salt, strlen(password), sizeof(key), salt_len);
+
+
+
+    if(rc==1){
+        printf("Error in getting Raw Hash\n");
     }
 
     rc= verifyPassword(password, encoded_hash);
