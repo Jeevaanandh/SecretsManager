@@ -1,5 +1,5 @@
-//Add a getHash_raw() function that uses the salt stored in the passwords DB to get the raw hash. This is the get the 32B key to encrypt the passwords.
-// Add a getHash_raw_customSalt() That gives Argon2 raw hash for the specified salt.
+//Add a getHash_raw() function that uses the salt stored in the passwords DB to get the raw hash. This is the get the 32B key to encrypt the passwords. (DONE)
+// Add a getHash_raw_customSalt() That gives Argon2 raw hash for the specified salt. (DONE)
 #include<openssl/rand.h>
 #include<stdio.h>
 #include<string.h>

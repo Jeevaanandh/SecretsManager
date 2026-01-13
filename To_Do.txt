@@ -1,2 +1,5 @@
-Use Argon2 hash as the key ---- no the original master password
+
+RESOLVED
+//Use Argon2 hash as the key ---- no the original master password
     Store this salt as a blob in the DB along with iv and the cipher
+//
