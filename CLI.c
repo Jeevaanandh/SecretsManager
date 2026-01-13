@@ -2,6 +2,8 @@
 #include<getopt.h>
 #include<string.h>
 
+#include "Encrypt/encrypt_main.h"
+
 void add_cmd(int argc, char *argv[]);
 int main(int argc, char *argv[]){
     if(argc<2){
@@ -67,6 +69,8 @@ void add_cmd(int argc, char *argv[]){
 
     else{
         //Call encrypt
+        printf("Calling the function\n");
+        encrypt_main(password, masterKey, tag);
 
     }
 

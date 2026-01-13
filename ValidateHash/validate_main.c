@@ -3,11 +3,9 @@
 #include "validateHash.h"
 #include "../db.h"
 
-int main(int argc, char *argv[]){
+int validate_main(char *password){
 
-    char password[128];
-    strncpy(password, argv[1], sizeof(password)-1);
-    password[sizeof(password)-1] = '\0';
+    
 
     char encoded_hash[256];
 
@@ -23,10 +21,11 @@ int main(int argc, char *argv[]){
     rc= verifyPassword(password, encoded_hash);
 
     if(rc==0){
-        printf("Password verified\n");
+        return 0;
     }
 
     else{
+        return 1;
         printf("Access Denied\n");
     }
 

@@ -3,8 +3,18 @@
 #include "encrypt.h"
 #include "../db.h"
 #include "../CreateHash/createHash.h"
+#include "../ValidateHash/validate_main.h"
 
-int main(int argc, char *argv[]){
+//Master password is password2
+//password to be stored is password
+
+//THIS FUNCTION WILL BE CALLED BY add_cmd() in CLI.c
+int encrypt_main(char *password, char *password2, char *tag){
+
+    if(validate_main(password2)==1){
+        printf("ACCESS DENIED!!!");
+        return 1;
+    }
 
     //This is to store the master Password in 32Bytes.
     unsigned char key[32];
@@ -13,25 +23,19 @@ int main(int argc, char *argv[]){
     unsigned char iv[16];
 
     //This is the password to store
-    unsigned char password[128]; //This is given by the user, soooo assign this to one of the argv ‼️ (DONE)
-    char tag[100];
-
-    strncpy((char*)password, argv[1], sizeof(password)-1);
-    strncpy((char*)tag, argv[2], sizeof(tag)-1);
-    password[sizeof(password)-1] = '\0';
-
-    //This is the master password
-    char password2[128];
-    strncpy(password2, argv[3], sizeof(password2) - 1);
-    password2[sizeof(password2) - 1] = '\0';
+    
 
     unsigned char salt[16];
+
+
 
     //Converting the masterPassword to a raw hash to use as key for encryption
     int rc= get_HashRaw(password2, key, salt, strlen(password2), sizeof(key), sizeof(salt));
 
     if(rc!=0){
         printf("Error getting raw Hash\n");
+        return 1;
+        
     }
 
     
@@ -45,6 +49,8 @@ int main(int argc, char *argv[]){
 
     if(res!=0){
         printf("Error encrypting\n");
+        return 1;
+        
     }
 
 
@@ -54,6 +60,10 @@ int main(int argc, char *argv[]){
 
     if(rc!=0){
         printf("Error storing password\n");
+        return 1;
+        
     }
+
+    return 0;
 
 }

@@ -8,35 +8,40 @@ LDFLAGS = -L/opt/homebrew/opt/openssl@3/lib \
 
 LIBS = -lssl -lcrypto -lsqlite3 -largon2
 
-OBJS = Encrypt/main.o Encrypt/encrypt.o CreateHash/createHash.o db.o 
-TARGET = encrypt_exe
 
 OBJS2 = CreateHash/main.o CreateHash/createHash.o db.o
 TARGET2= create_exe
 
 
-OBJS3 = ValidateHash/main.o ValidateHash/validateHash.o db.o 
-TARGET3 = validate_exe
+
 
 OBJS4= Decrypt/main.o Decrypt/decrypt.o ValidateHash/validateHash.o CreateHash/createHash.o db.o 
 TARGET4 = decrypt_exe
 
-all: $(TARGET) $(TARGET2) $(TARGET3) $(TARGET4)
-$(TARGET): $(OBJS)
-	$(CC) $(OBJS) $(LDFLAGS) $(LIBS) -o $(TARGET)
+OBJS5= CLI.o Encrypt/encrypt_main.o Encrypt/encrypt.o CreateHash/createHash.o ValidateHash/validate_main.o ValidateHash/validateHash.o db.o 
+TARGET5 = CLI
+
+all: $(TARGET2) $(TARGET3) $(TARGET4) $(TARGET5)
+
 
 $(TARGET2): $(OBJS2)
 	$(CC) $(OBJS2) $(LDFLAGS) $(LIBS) -o $(TARGET2)
 
 
-$(TARGET3): $(OBJS3)
-	$(CC) $(OBJS3) $(LDFLAGS) $(LIBS) -o $(TARGET3)
+
 
 
 $(TARGET4): $(OBJS4)
 	$(CC) $(OBJS4) $(LDFLAGS) $(LIBS) -o $(TARGET4)
 
 
+$(TARGET5): $(OBJS5)
+	$(CC) $(OBJS5) $(LDFLAGS) $(LIBS) -o $(TARGET5)
+
+
+
+CLI.o: CLI.c Encrypt/encrypt_main.h
+	$(CC) $(CFLAGS) -c CLI.c -o CLI.o
 
 
 Decrypt/main.o: Decrypt/main.c Decrypt/decrypt.h ValidateHash/validateHash.h CreateHash/createHash.h db.h
@@ -47,8 +52,8 @@ Decrypt/decrypt.o: Decrypt/decrypt.c Decrypt/decrypt.h
 	$(CC) $(CFLAGS) -c Decrypt/decrypt.c -o Decrypt/decrypt.o
 
 
-ValidateHash/main.o: ValidateHash/main.c ValidateHash/validateHash.h db.h
-	$(CC) $(CFLAGS) -c ValidateHash/main.c -o ValidateHash/main.o
+ValidateHash/validate_main.o: ValidateHash/validate_main.c ValidateHash/validate_main.h ValidateHash/validateHash.h db.h
+	$(CC) $(CFLAGS) -c ValidateHash/validate_main.c -o ValidateHash/validate_main.o
 
 
 ValidateHash/validateHash.o: ValidateHash/validateHash.c ValidateHash/validateHash.h 
@@ -65,8 +70,8 @@ CreateHash/createHash.o: CreateHash/createHash.c CreateHash/createHash.h
 
 
 
-Encrypt/main.o: Encrypt/main.c Encrypt/encrypt.h CreateHash/createHash.h db.h
-	$(CC) $(CFLAGS) -c Encrypt/main.c -o Encrypt/main.o
+Encrypt/encrypt_main.o: Encrypt/encrypt_main.c Encrypt/encrypt.h CreateHash/createHash.h db.h Encrypt/encrypt_main.h
+	$(CC) $(CFLAGS) -c Encrypt/encrypt_main.c -o Encrypt/encrypt_main.o
 
 Encrypt/encrypt.o: Encrypt/encrypt.c Encrypt/encrypt.h 
 	$(CC) $(CFLAGS) -c Encrypt/encrypt.c -o Encrypt/encrypt.o
