@@ -12,7 +12,7 @@
 int encrypt_main(char *password, char *password2, char *tag){
 
     if(validate_main(password2)==1){
-        printf("ACCESS DENIED!!!");
+        printf("\nACCESS DENIED!!!\n\n");
         return 1;
     }
 
@@ -33,7 +33,7 @@ int encrypt_main(char *password, char *password2, char *tag){
     int rc= get_HashRaw(password2, key, salt, strlen(password2), sizeof(key), sizeof(salt));
 
     if(rc!=0){
-        printf("Error getting raw Hash\n");
+        printf("\nError getting raw Hash\n\n");
         return 1;
         
     }
@@ -48,7 +48,7 @@ int encrypt_main(char *password, char *password2, char *tag){
     int res= encrypt(key, iv, password, cipher, &cipher_len, &iv_len);  //USE BRAINN!!! Passing the len variables by reference!!!
 
     if(res!=0){
-        printf("Error encrypting\n");
+        printf("\nError encrypting\n\n");
         return 1;
         
     }
@@ -59,7 +59,7 @@ int encrypt_main(char *password, char *password2, char *tag){
     rc= store_password(tag,cipher, iv,salt, cipher_len, iv_len, salt_len);  
 
     if(rc!=0){
-        printf("Error storing password\n");
+        printf("\nTag \"%s\" exists. Use a new one\n\n", tag);
         return 1;
         
     }

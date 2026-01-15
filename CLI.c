@@ -17,7 +17,7 @@ int main(int argc, char *argv[]){
     char command[100];
     strcpy(command, argv[1]);
 
-    printf("command: %s\n", command);
+    
 
     if(strcmp(command, "add")==0){
         add_cmd(argc-1, argv+1);
@@ -74,7 +74,7 @@ void add_cmd(int argc, char *argv[]){
 
     else{
         //Call encrypt
-        printf("Calling the function\n");
+        
         int rc= encrypt_main(password, masterKey, tag);
 
         if(rc==0){

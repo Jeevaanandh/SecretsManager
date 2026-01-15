@@ -51,7 +51,7 @@ int db_init(){
 
 
 int store_password(char *tag,unsigned char *cipher, unsigned char *iv, unsigned char *salt, int cipher_len, int iv_len, int salt_len){
-    sql= "CREATE TABLE IF NOT EXISTS passwords2(tag TEXT, cipher BLOB, iv BLOB, salt BLOB);";
+    sql= "CREATE TABLE IF NOT EXISTS passwords2(tag TEXT PRIMARY KEY, cipher BLOB, iv BLOB, salt BLOB);";
 
     sqlite3_stmt *stmt;
 
@@ -63,7 +63,7 @@ int store_password(char *tag,unsigned char *cipher, unsigned char *iv, unsigned 
         return 1;
     }
 
-    sql= "INSERT OR REPLACE INTO passwords2 (tag,cipher,iv,salt) VALUES (?,?,?,?);";
+    sql= "INSERT INTO passwords2 (tag,cipher,iv,salt) VALUES (?,?,?,?);";
     sqlite3_prepare_v2(DB, sql, -1, &stmt, NULL);
 
     sqlite3_bind_text(stmt, 1, tag, -1, SQLITE_TRANSIENT);

@@ -47,7 +47,7 @@ int decrypt_main(char *tag, char *password){
 
 
     if(rc==1){
-        printf("Error in getting Raw Hash\n");
+        printf("\nError in getting Raw Hash\n\n");
         return 1;
     }
 
@@ -57,7 +57,8 @@ int decrypt_main(char *tag, char *password){
         rc= decrypt_password(key, cipher, iv, plainText, cipher_len, &plain_len);
 
         if(rc==0){
-            printf("%s\n", plainText);
+            printf("\nTag: %s\t", tag);
+            printf("Password: %s\n\n", plainText);
         }
 
         else{
@@ -68,7 +69,7 @@ int decrypt_main(char *tag, char *password){
     }
 
     else{
-        printf("Access Denied\n");
+        printf("\nAccess Denied\n\n");
         return 1;
     }
 
