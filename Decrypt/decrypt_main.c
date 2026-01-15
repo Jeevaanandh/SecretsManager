@@ -5,15 +5,11 @@
 #include "../CreateHash/createHash.h"
 #include<string.h>
 
-int main(int argc, char *argv[]){
+int decrypt_main(char *tag, char *password){
 
-    char tag[100];
-    strncpy(tag, argv[1], sizeof(tag)-1);
-    tag[sizeof(tag)-1] = '\0';
     
-    char password[128];
-    strncpy(password, argv[2], sizeof(password) - 1);
-    password[sizeof(password) - 1] = '\0';
+    
+    
 
     /* Use password as AES key */
     unsigned char key[32];
@@ -52,6 +48,7 @@ int main(int argc, char *argv[]){
 
     if(rc==1){
         printf("Error in getting Raw Hash\n");
+        return 1;
     }
 
     rc= verifyPassword(password, encoded_hash);
@@ -65,13 +62,18 @@ int main(int argc, char *argv[]){
 
         else{
             printf("Error2\n");
+            return 1;
         }
 
     }
 
     else{
         printf("Access Denied\n");
+        return 1;
     }
+
+
+    return 0;
 
 
 }

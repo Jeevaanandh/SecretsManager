@@ -1,7 +1,7 @@
 .vscode
 db.o
 Encrypt/encrypt.o
-Encrypt/main.o
+Encrypt/encrypt_main.o
 
 CreateHash/createHash.o
 CreateHash/main.o
@@ -9,7 +9,7 @@ CreateHash/main.o
 ValidateHash/validateHash.o
 ValidateHash/main.o
 
-Decrypt/main.o
+Decrypt/decrypt_main.o
 Decrypt/decrypt.o
 
 check_exe

@@ -15,13 +15,12 @@ TARGET2= create_exe
 
 
 
-OBJS4= Decrypt/main.o Decrypt/decrypt.o ValidateHash/validateHash.o CreateHash/createHash.o db.o 
-TARGET4 = decrypt_exe
 
-OBJS5= CLI.o Encrypt/encrypt_main.o Encrypt/encrypt.o CreateHash/createHash.o ValidateHash/validate_main.o ValidateHash/validateHash.o db.o 
+
+OBJS5= CLI.o Encrypt/encrypt_main.o Encrypt/encrypt.o CreateHash/createHash.o ValidateHash/validate_main.o ValidateHash/validateHash.o Decrypt/decrypt_main.o Decrypt/decrypt.o db.o 
 TARGET5 = CLI
 
-all: $(TARGET2) $(TARGET3) $(TARGET4) $(TARGET5)
+all: $(TARGET2) $(TARGET3) $(TARGET5)
 
 
 $(TARGET2): $(OBJS2)
@@ -31,8 +30,7 @@ $(TARGET2): $(OBJS2)
 
 
 
-$(TARGET4): $(OBJS4)
-	$(CC) $(OBJS4) $(LDFLAGS) $(LIBS) -o $(TARGET4)
+
 
 
 $(TARGET5): $(OBJS5)
@@ -40,12 +38,12 @@ $(TARGET5): $(OBJS5)
 
 
 
-CLI.o: CLI.c Encrypt/encrypt_main.h
+CLI.o: CLI.c Encrypt/encrypt_main.h Decrypt/decrypt.h Decrypt/decrypt_main.h
 	$(CC) $(CFLAGS) -c CLI.c -o CLI.o
 
 
-Decrypt/main.o: Decrypt/main.c Decrypt/decrypt.h ValidateHash/validateHash.h CreateHash/createHash.h db.h
-	$(CC) $(CFLAGS) -c Decrypt/main.c -o Decrypt/main.o
+Decrypt/decrypt_main.o: Decrypt/decrypt_main.c Decrypt/decrypt.h Decrypt/decrypt_main.h ValidateHash/validateHash.h CreateHash/createHash.h db.h
+	$(CC) $(CFLAGS) -c Decrypt/decrypt_main.c -o Decrypt/decrypt_main.o
 
 
 Decrypt/decrypt.o: Decrypt/decrypt.c Decrypt/decrypt.h
