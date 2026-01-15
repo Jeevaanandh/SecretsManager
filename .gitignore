@@ -12,8 +12,11 @@ ValidateHash/main.o
 Decrypt/decrypt_main.o
 Decrypt/decrypt.o
 
+CLI.o
+
 check_exe
 create_exe
 validate_exe
 decrypt_exe
 encrypt_exe
+CLI
