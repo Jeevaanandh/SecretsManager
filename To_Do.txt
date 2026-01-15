@@ -3,3 +3,7 @@ RESOLVED
 //Use Argon2 hash as the key ---- no the original master password
     Store this salt as a blob in the DB along with iv and the cipher
 //
+
+1. Instead of giving the master key in the command itself, tray asking fro it separately. ie. after the enter key is pressed for add, get commands.
+   It just feels like there are too many parameters to pass in the command itself.
+2. Add a function to delete passwords based on tags.

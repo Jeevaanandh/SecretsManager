@@ -177,10 +177,6 @@ int get_cipher_fromDB(char * tag, char *storeTag, unsigned char *cipher, unsigne
 
         return 0;
 
-
-
-        
-
     }
 
     else{
@@ -188,7 +184,40 @@ int get_cipher_fromDB(char * tag, char *storeTag, unsigned char *cipher, unsigne
         return 1;
     }
 
-    
+}
 
 
+int getTagsAll(){
+    sql= "SELECT tag FROM passwords2;";
+
+    sqlite3_stmt *stmt;
+
+    sqlite3_prepare_v2(DB, sql, -1, &stmt, NULL);
+
+    const char *t;
+    int c=0;
+   
+    printf("\n");
+
+    while(sqlite3_step(stmt) == SQLITE_ROW){
+        t= (const char *) sqlite3_column_text(stmt,0);
+        
+
+        
+        printf("%s\t", t);
+        c+=1;
+        
+
+        if(c%4==0){
+            printf("\n");
+            
+        }
+
+    }
+
+    sqlite3_finalize(stmt);
+
+    printf("\n\n");
+
+    return 0;
 }

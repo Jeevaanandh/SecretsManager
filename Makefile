@@ -18,7 +18,7 @@ TARGET2= create_exe
 
 
 OBJS5= CLI.o Encrypt/encrypt_main.o Encrypt/encrypt.o CreateHash/createHash.o ValidateHash/validate_main.o ValidateHash/validateHash.o Decrypt/decrypt_main.o Decrypt/decrypt.o db.o 
-TARGET5 = CLI
+TARGET5 = dpa
 
 all: $(TARGET2) $(TARGET3) $(TARGET5)
 
@@ -38,7 +38,7 @@ $(TARGET5): $(OBJS5)
 
 
 
-CLI.o: CLI.c Encrypt/encrypt_main.h Decrypt/decrypt.h Decrypt/decrypt_main.h
+CLI.o: CLI.c Encrypt/encrypt_main.h Decrypt/decrypt.h Decrypt/decrypt_main.h db.h
 	$(CC) $(CFLAGS) -c CLI.c -o CLI.o
 
 

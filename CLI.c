@@ -4,9 +4,11 @@
 
 #include "Encrypt/encrypt_main.h"
 #include "Decrypt/decrypt_main.h"
+#include "db.h"
 
-void add_cmd(int argc, char *argv[]);
-void get_cmd(int argc, char *argv[]);
+void add_cmd(int argc, char *argv[]); //THIS IS TO ADD A NEW TAG:PASSWORD
+void get_cmd(int argc, char *argv[]); //THIS IS TO FETCH A PASSWORD BASED ON THE TAG
+void get_all(); //THIS IS TO GET ALL THE TAGS STORED
 
 int main(int argc, char *argv[]){
     if(argc<2){
@@ -26,6 +28,10 @@ int main(int argc, char *argv[]){
     else if(strcmp(command, "get")==0){
         get_cmd(argc-1, argv+1);
 
+    }
+
+    else if(strcmp(command,"getall")==0){
+        get_all();
     }
 
     else{
@@ -78,7 +84,7 @@ void add_cmd(int argc, char *argv[]){
         int rc= encrypt_main(password, masterKey, tag);
 
         if(rc==0){
-            printf("Added Successfully\n");
+            printf("\nAdded Successfully\n\n");
         }
 
     }
@@ -120,6 +126,10 @@ void get_cmd(int argc, char *argv[]){
         decrypt_main(tag, masterKey);
     }
 
+}
 
+void get_all(){
+    db_init();
+    getTagsAll();
 
-}   
+}
