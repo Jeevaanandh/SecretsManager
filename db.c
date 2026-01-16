@@ -221,3 +221,26 @@ int getTagsAll(){
 
     return 0;
 }
+
+
+int delete_entry(char *tag){
+    sql= "DELETE FROM passwords2 WHERE tag=?;";
+
+    sqlite3_stmt *stmt;
+
+    sqlite3_prepare_v2(DB, sql, -1, &stmt, NULL);
+
+    sqlite3_bind_text(stmt, 1, tag, -1, SQLITE_TRANSIENT);
+
+    int rc= sqlite3_step(stmt);
+
+    sqlite3_finalize(stmt);
+
+    if(rc== SQLITE_DONE){
+        return 0;
+    }
+
+    else{
+        return 1;
+    }
+}

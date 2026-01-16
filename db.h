@@ -10,5 +10,6 @@ int storeHash(char *encoded_hash);
 int get_hash_fromDB(char *encoded_hash, size_t hashlen);
 int get_cipher_fromDB(char * tag, char *storeTag, unsigned char *cipher, unsigned char *iv, unsigned char *salt, size_t t_len, int *cipher_size, int *iv_size, int *salt_size);
 int getTagsAll();
+int delete_entry(char *tag);
 
 #endif

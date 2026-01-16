@@ -25,8 +25,9 @@ int validate_main(char *password){
     }
 
     else{
+        printf("\n\nAccess Denied\n\n");
         return 1;
-        printf("Access Denied\n");
+        
     }
 
 

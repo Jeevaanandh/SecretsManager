@@ -1,14 +1,32 @@
 #include<stdio.h>
 #include<getopt.h>
 #include<string.h>
+#include<termios.h>
+#include<unistd.h>
 
 #include "Encrypt/encrypt_main.h"
 #include "Decrypt/decrypt_main.h"
+#include "ValidateHash/validate_main.h"
 #include "db.h"
 
 void add_cmd(int argc, char *argv[]); //THIS IS TO ADD A NEW TAG:PASSWORD
 void get_cmd(int argc, char *argv[]); //THIS IS TO FETCH A PASSWORD BASED ON THE TAG
 void get_all(); //THIS IS TO GET ALL THE TAGS STORED
+void delete_cmd(int argc, char *argv[]);
+
+void disable_echo(){
+    struct termios t;
+    tcgetattr(STDIN_FILENO, &t);
+    t.c_lflag &= ~ECHO;
+    tcsetattr(STDIN_FILENO, TCSANOW, &t);
+}
+
+void enable_echo(){
+    struct termios t;
+    tcgetattr(STDIN_FILENO, &t);
+    t.c_lflag |= ECHO;
+    tcsetattr(STDIN_FILENO, TCSANOW, &t);
+}
 
 int main(int argc, char *argv[]){
     if(argc<2){
@@ -34,6 +52,10 @@ int main(int argc, char *argv[]){
         get_all();
     }
 
+    else if(strcmp(command, "delete") == 0){
+        delete_cmd(argc-1, argv+1);
+    }
+
     else{
         printf("Help\n");
         return 0;
@@ -47,9 +69,17 @@ void add_cmd(int argc, char *argv[]){
     int opt;
     char tag[100]= {'\0'};
     char password[128]= {'\0'};
-    char masterKey[128]= {'\0'};
+    char masterKey[128];
 
-    while((opt= getopt(argc, argv, "t:p:k:")) !=-1){
+    printf("Master Key: ");
+    disable_echo();
+
+    scanf("%s", masterKey);
+    enable_echo();
+    printf("\n");
+    
+
+    while((opt= getopt(argc, argv, "t:p:")) !=-1){
         switch(opt){
             case 't':
                 strcpy(tag,optarg);
@@ -59,9 +89,7 @@ void add_cmd(int argc, char *argv[]){
                 strcpy(password,optarg);
                 break;
 
-            case 'k':
-                strcpy(masterKey, optarg);
-                break;
+            
 
             default:
                 printf("Error\n");
@@ -77,6 +105,7 @@ void add_cmd(int argc, char *argv[]){
         printf("Help\n");
             
     }
+
 
     else{
         //Call encrypt
@@ -96,17 +125,21 @@ void get_cmd(int argc, char *argv[]){
 
     int opt;
     char tag[100]= {'\0'};
-    char masterKey[128]= {'\0'};
+    char masterKey[128];
 
-    while((opt= getopt(argc, argv, "t:k:")) !=-1){
+    printf("Master Key: ");
+    disable_echo();
+    scanf("%s", masterKey);
+    enable_echo();
+
+    printf("\n");
+
+    while((opt= getopt(argc, argv, "t:")) !=-1){
         switch(opt){
             case 't':
                 strcpy(tag,optarg);
                 break;
 
-            case 'k':
-                strcpy(masterKey, optarg);
-                break;
 
             default:
                 printf("Error\n");
@@ -131,5 +164,52 @@ void get_cmd(int argc, char *argv[]){
 void get_all(){
     db_init();
     getTagsAll();
+
+}
+
+void delete_cmd(int argc, char *argv[]){
+    int opt;
+    char tag[100]= {'\0'};
+
+    char masterKey[128];
+
+    printf("Master Key: ");
+    disable_echo();
+    scanf("%s", masterKey);
+    enable_echo();
+
+    while((opt= getopt(argc, argv, "t:")) !=-1){
+        switch(opt){
+            case 't':
+                strcpy(tag,optarg);
+                break;
+
+
+            default:
+                printf("Error\n");
+                return;
+
+        }
+
+    }
+
+    if(tag[0]=='\0'){
+        printf("Not Enough Arguments\n");
+        printf("Help\n");
+            
+    }
+
+    else{
+        if(validate_main(masterKey)==0){
+            int rc=delete_entry(tag);
+
+            if(rc==0){
+
+                printf("\n\nSuccessfully Deleted\n\n");
+            }
+            
+        }        
+        
+    }
 
 }

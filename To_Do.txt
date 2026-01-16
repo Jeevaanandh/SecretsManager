@@ -4,6 +4,18 @@ RESOLVED
     Store this salt as a blob in the DB along with iv and the cipher
 //
 
+
+RESOLVED
+//
 1. Instead of giving the master key in the command itself, tray asking fro it separately. ie. after the enter key is pressed for add, get commands.
    It just feels like there are too many parameters to pass in the command itself.
+//
+
+
+RESOLVED
+//
 2. Add a function to delete passwords based on tags.
+//
+
+
+3. (MAYBE) Store added date column in the DB for the date the password was added??
