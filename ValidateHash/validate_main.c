@@ -30,11 +30,5 @@ int validate_main(char *password){
         
     }
 
-
-
-
-
     
-
-
 }

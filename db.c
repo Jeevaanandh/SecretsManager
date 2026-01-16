@@ -1,5 +1,5 @@
 //Use Sqlite to Add to the DB.
-//You have to add function to: Store Master Password Hash
+//You have to add function to: Store Master Password Hash (DONE)
 //                             Store Encrypted password and IV (DONE)
 //                             Retrieve the encoded hash of the mater password [This is for validateHash] (DONE)
 

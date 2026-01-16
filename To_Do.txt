@@ -19,3 +19,5 @@ RESOLVED
 
 
 3. (MAYBE) Store added date column in the DB for the date the password was added??
+
+4. Try calling createHash from db_init(). Prompt he user to create a masterKey if the db doesnt already exist.

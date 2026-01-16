@@ -208,7 +208,9 @@ void delete_cmd(int argc, char *argv[]){
                 printf("\n\nSuccessfully Deleted\n\n");
             }
             
-        }        
+        } 
+        
+        
         
     }
 
