@@ -84,7 +84,7 @@ int store_password(char *tag,unsigned char *cipher, unsigned char *iv, unsigned 
 
 
 int storeHash(char *encoded_hash){
-    sql= "CREATE TABLE IF NOT EXISTS MasterHash (hash TEXT);";
+    sql= "CREATE TABLE IF NOT EXISTS MasterHash (id TEXT, hash TEXT);";
 
     sqlite3_stmt *stmt;
 
@@ -96,7 +96,7 @@ int storeHash(char *encoded_hash){
         return 1;
     }
 
-    sql= "INSERT INTO MasterHash (hash) VALUES (?);";
+    sql= "INSERT OR REPLACE INTO MasterHash (id,hash) VALUES (\"1\", ?);";
     sqlite3_prepare_v2(DB, sql, -1, &stmt, NULL);
 
     sqlite3_bind_text(stmt, 1, encoded_hash, -1, SQLITE_TRANSIENT);
