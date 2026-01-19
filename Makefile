@@ -1,12 +1,7 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -I. \
-         -I/opt/homebrew/opt/openssl@3/include \
-         -I/opt/homebrew/opt/argon2/include
-
-LDFLAGS = -L/opt/homebrew/opt/openssl@3/lib \
-          -L/opt/homebrew/opt/argon2/lib
-
-LIBS = -lssl -lcrypto -lsqlite3 -largon2
+CFLAGS = -Wall -Wextra -I. $(shell pkg-config --cflags openssl libargon2 sqlite3)
+LDFLAGS =
+LIBS = $(shell pkg-config --libs openssl libargon2 sqlite3)
 
 
 
