@@ -9,7 +9,7 @@
 //password to be stored is password
 
 //THIS FUNCTION WILL BE CALLED BY add_cmd() in CLI.c
-int encrypt_main(char *password, char *password2, char *tag){
+int encrypt_main(unsigned char *password, char *password2, char *tag){
 
     if(validate_main(password2)==1){
         printf("\nACCESS DENIED!!!\n\n");

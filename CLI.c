@@ -102,7 +102,7 @@ void add_cmd(int argc, char *argv[]){
     
     int opt;
     char tag[100]= {'\0'};
-    char password[128]= {'\0'};
+    unsigned char password[128]= {'\0'};
     char masterKey[128];
 
     printf("Master Key: ");
@@ -120,7 +120,7 @@ void add_cmd(int argc, char *argv[]){
                 break;
 
             case 'p':
-                strcpy(password,optarg);
+                strcpy((char *)password,optarg);
                 break;
 
             
