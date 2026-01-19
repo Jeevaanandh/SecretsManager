@@ -10,24 +10,10 @@ LIBS = -lssl -lcrypto -lsqlite3 -largon2
 
 
 
-
-
-
-
-
-
 OBJS5= CLI.o Encrypt/encrypt_main.o Encrypt/encrypt.o CreateHash/createHash.o ValidateHash/validate_main.o ValidateHash/validateHash.o Decrypt/decrypt_main.o Decrypt/decrypt.o CreateHash/hash_main.o db.o 
 TARGET5 = dpa
 
 all:  $(TARGET5)
-
-
-
-
-
-
-
-
 
 
 

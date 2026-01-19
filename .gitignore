@@ -4,7 +4,7 @@ Encrypt/encrypt.o
 Encrypt/encrypt_main.o
 
 CreateHash/createHash.o
-CreateHash/main.o
+CreateHash/hash_main.o
 
 ValidateHash/validateHash.o
 ValidateHash/main.o

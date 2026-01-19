@@ -30,11 +30,12 @@ void enable_echo(){
 }
 
 //USE THIS FUNCTION TO CHECK IF secrets.db EXISTS. OTHERWISE, THE USER NEEDS TO CREATE A MASTER KEY!!!
+//THIS RUNS AUTOMATICALLY ANYTIME A COMMAND IS RUN
 __attribute__((constructor))
 void before_main() {
     int rc= check_init();
 
-    printf("Runs First!!!\n");
+    
     if(rc!=0){
         printf("\nRunning for the first time...\n");
         printf("\nInitializing...\n\n");
@@ -46,6 +47,7 @@ void before_main() {
         disable_echo();
         scanf("%s", masterKey);
         enable_echo();
+        printf("\n");
 
         rc= hash_main(masterKey);
 
