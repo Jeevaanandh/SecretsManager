@@ -7,6 +7,7 @@
 #include "Encrypt/encrypt_main.h"
 #include "Decrypt/decrypt_main.h"
 #include "ValidateHash/validate_main.h"
+#include "CreateHash/hash_main.h"
 #include "db.h"
 
 void add_cmd(int argc, char *argv[]); //THIS IS TO ADD A NEW TAG:PASSWORD
@@ -27,6 +28,37 @@ void enable_echo(){
     t.c_lflag |= ECHO;
     tcsetattr(STDIN_FILENO, TCSANOW, &t);
 }
+
+//USE THIS FUNCTION TO CHECK IF secrets.db EXISTS. OTHERWISE, THE USER NEEDS TO CREATE A MASTER KEY!!!
+__attribute__((constructor))
+void before_main() {
+    int rc= check_init();
+
+    printf("Runs First!!!\n");
+    if(rc!=0){
+        printf("\nRunning for the first time...\n");
+        printf("\nInitializing...\n\n");
+
+        db_init();
+
+        char masterKey[128];
+        printf("Create a Master Key: ");
+        disable_echo();
+        scanf("%s", masterKey);
+        enable_echo();
+
+        rc= hash_main(masterKey);
+
+        if(rc==0){
+            printf("\n\nMaster key saved successfully\n\n");
+        }
+
+
+
+    }
+    
+}
+
 
 int main(int argc, char *argv[]){
     if(argc<2){

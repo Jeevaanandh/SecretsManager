@@ -12,4 +12,7 @@ int get_cipher_fromDB(char * tag, char *storeTag, unsigned char *cipher, unsigne
 int getTagsAll();
 int delete_entry(char *tag);
 
+//THIS FUNCTION CHECK IF THE DB IS PRESENT IN THE HOME DIRECTORY OR NOT
+int check_init();
+
 #endif

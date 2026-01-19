@@ -9,22 +9,20 @@ LDFLAGS = -L/opt/homebrew/opt/openssl@3/lib \
 LIBS = -lssl -lcrypto -lsqlite3 -largon2
 
 
-OBJS2 = CreateHash/main.o CreateHash/createHash.o db.o
-TARGET2= create_exe
 
 
 
 
 
 
-OBJS5= CLI.o Encrypt/encrypt_main.o Encrypt/encrypt.o CreateHash/createHash.o ValidateHash/validate_main.o ValidateHash/validateHash.o Decrypt/decrypt_main.o Decrypt/decrypt.o db.o 
+
+OBJS5= CLI.o Encrypt/encrypt_main.o Encrypt/encrypt.o CreateHash/createHash.o ValidateHash/validate_main.o ValidateHash/validateHash.o Decrypt/decrypt_main.o Decrypt/decrypt.o CreateHash/hash_main.o db.o 
 TARGET5 = dpa
 
-all: $(TARGET2) $(TARGET3) $(TARGET5)
+all:  $(TARGET5)
 
 
-$(TARGET2): $(OBJS2)
-	$(CC) $(OBJS2) $(LDFLAGS) $(LIBS) -o $(TARGET2)
+
 
 
 
@@ -38,7 +36,7 @@ $(TARGET5): $(OBJS5)
 
 
 
-CLI.o: CLI.c Encrypt/encrypt_main.h Decrypt/decrypt.h Decrypt/decrypt_main.h db.h
+CLI.o: CLI.c Encrypt/encrypt_main.h Decrypt/decrypt.h Decrypt/decrypt_main.h  db.h
 	$(CC) $(CFLAGS) -c CLI.c -o CLI.o
 
 
@@ -59,8 +57,8 @@ ValidateHash/validateHash.o: ValidateHash/validateHash.c ValidateHash/validateHa
 
 
 
-CreateHash/main.o: CreateHash/main.c CreateHash/createHash.h db.h
-	$(CC) $(CFLAGS) -c CreateHash/main.c -o CreateHash/main.o
+CreateHash/hash_main.o: CreateHash/hash_main.c CreateHash/createHash.h CreateHash/hash_main.h db.h
+	$(CC) $(CFLAGS) -c CreateHash/hash_main.c -o CreateHash/hash_main.o
 
 
 CreateHash/createHash.o: CreateHash/createHash.c CreateHash/createHash.h 

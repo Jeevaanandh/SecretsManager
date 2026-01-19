@@ -3,12 +3,8 @@
 #include "createHash.h"
 #include "../db.h"
 
-int main(int argc, char *argv[]){
-    char password[128];
-    strncpy(password, argv[1], sizeof(password)-1);
-    password[sizeof(password)-1] = '\0';
-
-
+int hash_main(char *password){
+    
     char encoded_hash[256];
 
     int rc= getHash_encoded(password, encoded_hash, sizeof(encoded_hash));
@@ -28,10 +24,13 @@ int main(int argc, char *argv[]){
     rc= storeHash(encoded_hash);
 
     if(rc==0){
+        return 0;
         printf("Hash stored successfully\n");
     }
 
     printf("%d\n", rc);
+
+    return 1;
 
 
 

@@ -7,6 +7,7 @@
 #include<string.h>
 #include "db.h"
 #include<stdlib.h>
+#include<sys/stat.h>
 
 
 
@@ -44,6 +45,36 @@ int db_init(){
     }
 
     return 0;
+
+
+}
+
+int check_init(){
+    struct stat fp;
+    char db_path[1024];
+    #if defined(_WIN32) || defined(_WIN64)
+        homedir= getenv("USERPROFILE");
+        snprintf(db_path, sizeof(db_path), "%s\\secrets.db", homedir);
+
+    
+
+    #else
+        homedir= getenv("HOME");
+        snprintf(db_path, sizeof(db_path), "%s/secrets.db", homedir);
+
+    #endif
+
+    if(homedir == NULL){
+        return 1;
+    }
+
+    if(stat(db_path, &fp)!=0){
+        return 1;
+
+    }
+
+    return 0;
+
 
 
 }
