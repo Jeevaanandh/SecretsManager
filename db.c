@@ -114,6 +114,8 @@ int store_password(char *tag,unsigned char *cipher, unsigned char *iv, unsigned 
 }
 
 
+
+
 int storeHash(char *encoded_hash){
     sql= "CREATE TABLE IF NOT EXISTS MasterHash (id TEXT, hash TEXT);";
 
@@ -274,4 +276,38 @@ int delete_entry(char *tag){
     else{
         return 1;
     }
+
+}
+
+
+int replace_password(char *tag,unsigned char *cipher, unsigned char *iv, unsigned char *salt, int cipher_len, int iv_len, int salt_len){
+    sql= "CREATE TABLE IF NOT EXISTS passwords2(tag TEXT PRIMARY KEY, cipher BLOB, iv BLOB, salt BLOB);";
+
+    sqlite3_stmt *stmt;
+
+    sqlite3_prepare_v2(DB, sql, -1, &stmt, NULL);
+    rc= sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+
+    if(rc!= SQLITE_DONE){
+        return 1;
+    }
+
+    sql= "REPLACE INTO passwords2 (tag,cipher,iv,salt) VALUES (?,?,?,?);";
+    sqlite3_prepare_v2(DB, sql, -1, &stmt, NULL);
+
+    sqlite3_bind_text(stmt, 1, tag, -1, SQLITE_TRANSIENT);
+    sqlite3_bind_blob(stmt, 2, cipher, cipher_len, SQLITE_TRANSIENT);
+    sqlite3_bind_blob(stmt, 3, iv, iv_len, SQLITE_TRANSIENT);
+    sqlite3_bind_blob(stmt, 4, salt, salt_len, SQLITE_TRANSIENT);
+
+    rc= sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+
+    if(rc!= SQLITE_DONE){
+        return 1;
+    }
+
+    return 0;
+
 }

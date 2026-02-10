@@ -9,7 +9,7 @@
 //password to be stored is password
 
 //THIS FUNCTION WILL BE CALLED BY add_cmd() in CLI.c
-int encrypt_main(unsigned char *password, char *password2, char *tag){
+int encrypt_main(unsigned char *password, char *password2, char *tag, int check){
 
     if(validate_main(password2)==1){
         printf("\nACCESS DENIED!!!\n\n");
@@ -56,13 +56,30 @@ int encrypt_main(unsigned char *password, char *password2, char *tag){
 
     
     //This function is from db.c. This is to store the key and the iv in the DB
-    rc= store_password(tag,cipher, iv,salt, cipher_len, iv_len, salt_len);  
+    if(check==0){
+        rc= store_password(tag,cipher, iv,salt, cipher_len, iv_len, salt_len); 
 
-    if(rc!=0){
-        printf("\nTag \"%s\" exists. Use a new one\n\n", tag);
-        return 1;
+        if(rc!=0){
+            printf("\nTag \"%s\" exists. Use a new one\n\n", tag);
+            return 1;
         
+        } 
     }
+
+    else{
+        printf("Calling Replace\n\n");
+        rc= replace_password(tag,cipher, iv,salt, cipher_len, iv_len, salt_len); 
+
+        if(rc!=0){
+            printf("\nTag \"%s\" Not Found\n\n", tag);
+            return 1;
+        
+        } 
+
+    }
+    
+
+    
 
     return 0;
 

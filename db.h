@@ -11,6 +11,7 @@ int get_hash_fromDB(char *encoded_hash, size_t hashlen);
 int get_cipher_fromDB(char * tag, char *storeTag, unsigned char *cipher, unsigned char *iv, unsigned char *salt, size_t t_len, int *cipher_size, int *iv_size, int *salt_size);
 int getTagsAll();
 int delete_entry(char *tag);
+int replace_password(char *tag,unsigned char *cipher, unsigned char *iv, unsigned char *salt, int cipher_len, int iv_len, int salt_len);
 
 //THIS FUNCTION CHECK IF THE DB IS PRESENT IN THE HOME DIRECTORY OR NOT
 int check_init();

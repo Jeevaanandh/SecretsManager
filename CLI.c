@@ -14,6 +14,7 @@ void add_cmd(int argc, char *argv[]); //THIS IS TO ADD A NEW TAG:PASSWORD
 void get_cmd(int argc, char *argv[]); //THIS IS TO FETCH A PASSWORD BASED ON THE TAG
 void get_all(); //THIS IS TO GET ALL THE TAGS STORED
 void delete_cmd(int argc, char *argv[]);
+void modify_cmd(int argc, char *argv[]);
 
 void disable_echo(){
     struct termios t;
@@ -90,6 +91,10 @@ int main(int argc, char *argv[]){
         delete_cmd(argc-1, argv+1);
     }
 
+    else if(strcmp(command, "modify") == 0){
+        modify_cmd(argc-1, argv+1);
+    }
+
     else{
         printf("Help\n");
         return 0;
@@ -144,7 +149,7 @@ void add_cmd(int argc, char *argv[]){
     else{
         //Call encrypt
         
-        int rc= encrypt_main(password, masterKey, tag);
+        int rc= encrypt_main(password, masterKey, tag, 0);
 
         if(rc==0){
             printf("\nAdded Successfully\n\n");
@@ -247,5 +252,62 @@ void delete_cmd(int argc, char *argv[]){
         
         
     }
+
+}
+
+
+void modify_cmd(int argc, char* argv[]){
+    int opt;
+    char tag[100]= {'\0'};
+    unsigned char password[128]= {'\0'};
+    char masterKey[128];
+
+    printf("Master Key: ");
+    disable_echo();
+
+    scanf("%s", masterKey);
+    enable_echo();
+    printf("\n");
+    
+
+    while((opt= getopt(argc, argv, "t:p:")) !=-1){
+        switch(opt){
+            case 't':
+                strcpy(tag,optarg);
+                break;
+
+            case 'p':
+                strcpy((char *)password,optarg);
+                break;
+
+            
+
+            default:
+                printf("Error\n");
+                return;
+
+        }
+
+        
+    }
+
+    if(tag[0]=='\0' || password[0]=='\0' || masterKey[0]=='\0'){
+        printf("Not Enough Arguments\n");
+        printf("Help\n");
+            
+    }
+
+
+    else{
+        //Call encrypt
+        
+        int rc= encrypt_main(password, masterKey, tag, 1);
+
+        if(rc==0){
+            printf("\nModified Successfully\n\n");
+        }
+
+    }
+
 
 }
