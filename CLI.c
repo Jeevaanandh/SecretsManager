@@ -262,23 +262,15 @@ void modify_cmd(int argc, char* argv[]){
     unsigned char password[128]= {'\0'};
     char masterKey[128];
 
-    printf("Master Key: ");
-    disable_echo();
-
-    scanf("%s", masterKey);
-    enable_echo();
-    printf("\n");
+    
     
 
-    while((opt= getopt(argc, argv, "t:p:")) !=-1){
+    while((opt= getopt(argc, argv, "t:")) !=-1){
         switch(opt){
             case 't':
                 strcpy(tag,optarg);
                 break;
 
-            case 'p':
-                strcpy((char *)password,optarg);
-                break;
 
             
 
@@ -291,15 +283,31 @@ void modify_cmd(int argc, char* argv[]){
         
     }
 
-    if(tag[0]=='\0' || password[0]=='\0' || masterKey[0]=='\0'){
+    if(tag[0]=='\0'){
         printf("Not Enough Arguments\n");
         printf("Help\n");
             
     }
 
+    
+
 
     else{
         //Call encrypt
+
+        printf("Master Key: ");
+        disable_echo();
+
+        scanf("%s", masterKey);
+        enable_echo();
+        printf("\n");
+
+        printf("Password: ");
+        disable_echo();
+
+        scanf("%s", password);
+        enable_echo();
+        printf("\n");
         
         int rc= encrypt_main(password, masterKey, tag, 1);
 

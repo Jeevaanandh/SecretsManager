@@ -67,7 +67,7 @@ int encrypt_main(unsigned char *password, char *password2, char *tag, int check)
     }
 
     else{
-        printf("Calling Replace\n\n");
+      
         rc= replace_password(tag,cipher, iv,salt, cipher_len, iv_len, salt_len); 
 
         if(rc!=0){
